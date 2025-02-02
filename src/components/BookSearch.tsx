@@ -1,22 +1,10 @@
 import { useState } from "react";
 import { Search, Copy } from "lucide-react";
-
-type SearchBookResult = {
-  id: string;
-  volumeInfo: {
-    title: string;
-    authors?: string[];
-    imageLinks?: {
-      thumbnail: string;
-    };
-    categories?: string[];
-    description?: string;
-  };
-};
+import { GoogleBook } from "../types/google_book";
 
 const BookSearch = () => {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<SearchBookResult[]>([]);
+  const [results, setResults] = useState<GoogleBook[]>([]);
   const [isSearching, setIsSearching] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
 

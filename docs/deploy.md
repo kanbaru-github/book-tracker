@@ -2,6 +2,8 @@
 
 ## デプロイ方法
 
+- 2回目以降は**手順5**から
+
 1. [gh-pages](https://www.npmjs.com/package/gh-pages)をインストール
 
 ```bash
@@ -32,4 +34,10 @@ npm run build
 
 ```bash
 npm run deploy
+```
+
+- 確認する場合はこちらのコマンド
+
+```bash
+npm run preview
 ```

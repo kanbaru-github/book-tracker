@@ -2,9 +2,11 @@
 
 ## 使用技術
 
+- [npm](https://www.npmjs.com/)
 - [React](https://ja.react.dev/)
 - [Vite](https://vitejs.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
+- [Sass](https://sass-lang.com/)
 
 ## APIs
 

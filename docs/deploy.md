@@ -22,8 +22,13 @@ npm install gh-pages --save-dev
 
 [![Image from Gyazo](https://i.gyazo.com/83f21b0202db8833f69507f5d4b20e48.png)](https://gyazo.com/83f21b0202db8833f69507f5d4b20e48)
 
+5. ビルド
 
-4. デプロイ
+```bash
+npm run build
+```
+
+6. デプロイ
 
 ```bash
 npm run deploy

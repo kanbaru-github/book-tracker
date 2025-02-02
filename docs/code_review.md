@@ -1,7 +1,7 @@
 # コードレビュー(コーディング規約)
 
 ## バージョン管理(Repository)
-- [GitHub - Code]([text](https://github.com/kanbaru-github/book-tracker))
+- [GitHub - Code](https://github.com/kanbaru-github/book-tracker)
 
 ## ソースレビューはCodeRabbitを使用
 - [公式サイト](https://coderabbit.ai/)

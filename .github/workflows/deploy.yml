@@ -5,6 +5,9 @@ on:
     branches:
       - main  # メインブランチにプッシュされたときに実行
 
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest

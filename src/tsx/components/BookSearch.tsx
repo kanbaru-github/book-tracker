@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search, Copy } from "lucide-react";
-import { GoogleBook } from "../types/google_book";
+import { GoogleBook } from "../../types/google_book";
 
 const BookSearch = () => {
   const [query, setQuery] = useState("");

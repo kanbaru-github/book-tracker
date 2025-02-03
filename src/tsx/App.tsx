@@ -1,7 +1,7 @@
 import BookSearch from "./components/BookSearch";
 import BookList from "./components/BookList";
-import reactLogo from './assets/react.svg'
-import './scss/App.scss'
+import reactLogo from "/src/assets/react.svg";
+import "/src/scss/App.scss";
 
 function App() {
   return (
@@ -18,4 +18,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { GoogleBook } from "../types/google_book";
-import { HAVE_READ_SHELF_ID } from "../constants/google_book";
+import { GoogleBook } from "../../types/google_book";
+import { HAVE_READ_SHELF_ID } from "../../constants/google_book";
 
 const USER_ID = import.meta.env.VITE_GOOGLE_BOOKS_USER_ID;
 const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;

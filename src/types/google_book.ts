@@ -1,13 +1,12 @@
-export type GoogleBook = {
+export interface GoogleBook {
   id: string;
   volumeInfo: {
     title: string;
     authors?: string[];
-    publishedDate?: string;
+    description?: string;
+    categories?: string[];
     imageLinks?: {
       thumbnail: string;
     };
-    description?: string;
-    categories?: string[];
   };
-};
+}

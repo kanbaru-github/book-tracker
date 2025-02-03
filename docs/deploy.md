@@ -2,7 +2,7 @@
 
 ## デプロイ方法
 
-- 2回目以降は**手順5**から
+- [自動化済み](/.github/workflows/deploy.yml)
 
 1. [gh-pages](https://www.npmjs.com/package/gh-pages)をインストール
 
@@ -41,3 +41,8 @@ npm run deploy
 ```bash
 npm run preview
 ```
+
+## 環境変数
+
+- 環境変数は[Actions secrets and variables
+](https://github.com/kanbaru-github/book-tracker/settings/secrets/actions)で設定

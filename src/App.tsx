@@ -1,7 +1,7 @@
 import BookSearch from "./components/BookSearch";
 import BookList from "./components/BookList";
 import reactLogo from './assets/react.svg'
-import './App.css'
+import './scss/App.scss'
 
 function App() {
   return (

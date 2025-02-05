@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Search } from "lucide-react";
-import { GoogleBook } from "../../types/google_book";
+import { GoogleBook } from "../../ts/types/google_book";
 import "../../scss/components/BookSearch.scss";
 import BookList from "./BookList";
 
@@ -41,7 +41,11 @@ const BookSearch = () => {
           onKeyDown={(e) => e.key === "Enter" && searchBooks()}
           placeholder="書籍名や著者名で検索..."
         />
-        <button onClick={searchBooks} disabled={isSearching}>
+        <button
+          onClick={searchBooks}
+          disabled={isSearching}
+          aria-label="検索実行"
+        >
           <Search size={15} />
         </button>
       </div>

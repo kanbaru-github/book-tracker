@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { GoogleBook } from "../../types/google_book";
-import { HAVE_READ_SHELF_ID } from "../../constants/google_book";
+import { GoogleBook } from "../../ts/types/google_book";
+import { HAVE_READ_SHELF_ID } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
 
@@ -22,7 +22,7 @@ const Bookshelf = () => {
 
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${USER_ID}/bookshelves/${HAVE_READ_SHELF_ID}/volumes?key=${API_KEY}`,
+          `https://www.googleapis.com/books/v1/users/${USER_ID}/bookshelves/${HAVE_READ_SHELF_ID}/volumes?key=${API_KEY}`
         );
         const data = await response.json();
         const fetchedBooks = data.items || [];
@@ -43,14 +43,18 @@ const Bookshelf = () => {
       <h2>書棚</h2>
 
       {loading ? (
-        <div className="loading">読み込み中...</div>
+        <div className="loading" role="status" aria-live="polite">
+          読み込み中...
+        </div>
       ) : error ? (
-        <div className="error">{error}</div>
+        <div className="error" role="alert" aria-live="assertive">
+          {error}
+        </div>
       ) : (
         <BookList books={books} />
       )}
     </section>
   );
-}
+};
 
 export default Bookshelf;

@@ -36,6 +36,7 @@ const BookSearch = () => {
       <div className="search-section__input-container">
         <input
           type="text"
+          name="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && searchBooks()}

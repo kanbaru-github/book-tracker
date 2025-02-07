@@ -1,18 +1,45 @@
 import { test, expect } from '@playwright/test';
 
-test('has title', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+const LOCAL_URL = 'http://localhost:5173/book-tracker/';
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwright/);
+test('has title', async ({ page }) => {
+  await page.goto(LOCAL_URL);
+
+  // タイトルタグ確認
+  await expect(page).toHaveTitle(/BOOK TRACKER/);
 });
 
-test('get started link', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+test('BookSearch component', async ({ page }) => {
+  await page.goto(LOCAL_URL);
 
-  // Click the get started link.
-  await page.getByRole('link', { name: 'Get started' }).click();
+  await page.fill('input[name="search"]', 'test book');
+  await page.click('button[aria-label="検索実行"]');
 
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.getByRole('heading', { name: 'Installation' })).toBeVisible();
+  // Expect an element to be visible.
+  await expect(page.getByText('検索中...')).toBeVisible();
+
+  const errors: string[] = [];
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      errors.push(msg.text());
+    }
+  });
+
+  await expect(errors).toHaveLength(0);
+});
+
+test('Bookshelf component', async ({ page }) => {
+  await page.goto(LOCAL_URL);
+
+  await expect(page.locator('section.bookshelf')).toBeVisible();
+
+  await expect(page.locator('ul.book-list')).toBeVisible();
+
+  const errors: string[] = [];
+  page.on('console', msg => {
+    if (msg.type() === 'error') {
+      errors.push(msg.text());
+    }
+  });
+  await expect(errors).toHaveLength(0);
 });

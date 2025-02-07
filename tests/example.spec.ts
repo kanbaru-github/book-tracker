@@ -1,16 +1,14 @@
 import { test, expect } from '@playwright/test';
 
-const LOCAL_URL = 'http://localhost:5173/book-tracker/';
-
 test('has title', async ({ page }) => {
-  await page.goto(LOCAL_URL);
+  await page.goto('/');
 
   // タイトルタグ確認
   await expect(page).toHaveTitle(/BOOK TRACKER/);
 });
 
 test('BookSearch component', async ({ page }) => {
-  await page.goto(LOCAL_URL);
+  await page.goto('/');
 
   await page.fill('input[name="search"]', 'test book');
   await page.click('button[aria-label="検索実行"]');
@@ -29,7 +27,7 @@ test('BookSearch component', async ({ page }) => {
 });
 
 test('Bookshelf component', async ({ page }) => {
-  await page.goto(LOCAL_URL);
+  await page.goto('/');
 
   await expect(page.locator('section.bookshelf')).toBeVisible();
 

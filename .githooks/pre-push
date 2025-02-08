@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Run static analysis
+npx playwright test
+
+# Check the exit code of the test command
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+# If we get here, linting passed
+echo "Testing passed. Proceeding with the push."
+exit 0

@@ -3,9 +3,8 @@
 # Run static analysis
 npx playwright test
 
-# Check the exit code of the lint command
+# Check the exit code of the test command
 if [ $? -ne 0 ]; then
-  echo "Testing failed. Please fix the errors before committing."
   exit 1
 fi
 

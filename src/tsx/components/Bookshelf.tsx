@@ -11,6 +11,8 @@ const Bookshelf: React.FC = () => {
   const [userId, setUserId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const maxResults = 40;
+
   // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
@@ -27,7 +29,7 @@ const Bookshelf: React.FC = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${HAVE_READ_SHELF_ID}/volumes`
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${HAVE_READ_SHELF_ID}/volumes?maxResults=${maxResults}`
         );
         const data = await response.json();
         const fetchedBooks = data.items || [];
@@ -70,6 +72,8 @@ const Bookshelf: React.FC = () => {
       ) as HTMLDialogElement;
       dialog.querySelector("input")?.focus();
       document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
     }
   }, [isDialogOpen]);
 

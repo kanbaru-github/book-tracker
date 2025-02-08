@@ -7,6 +7,8 @@ function App() {
     <main className="max-w-6xl mx-auto p-4">
       <h1>BOOK TRACKER</h1>
 
+      <Bug/>
+
       <BookSearch />
 
       <Bookshelf />

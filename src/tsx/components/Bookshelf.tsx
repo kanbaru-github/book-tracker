@@ -65,7 +65,9 @@ const Bookshelf: React.FC = () => {
 
   useEffect(() => {
     if (isDialogOpen) {
-      const dialog = document.querySelector(".bookshelf__dialog") as HTMLDialogElement;
+      const dialog = document.querySelector(
+        ".bookshelf__dialog"
+      ) as HTMLDialogElement;
       dialog.querySelector("input")?.focus();
       document.body.style.overflow = "hidden";
     }

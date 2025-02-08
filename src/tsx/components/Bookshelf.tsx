@@ -15,7 +15,7 @@ const Bookshelf: React.FC = () => {
 
   // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
   useEffect(() => {
-    const storedUserId = localStorage.getItem("userId");
+    const storedUserId = localStorage.getItem("googleBooksUserId");
     if (storedUserId) {
       setUserId(storedUserId);
     } else {
@@ -53,14 +53,14 @@ const Bookshelf: React.FC = () => {
     const newUserId = formData.get("userId") as string;
 
     if (newUserId) {
-      localStorage.setItem("userId", newUserId);
+      localStorage.setItem("googleBooksUserId", newUserId);
       setUserId(newUserId);
       setIsDialogOpen(false);
     }
   };
 
   const removeUserId = () => {
-    localStorage.removeItem("userId");
+    localStorage.removeItem("googleBooksUserId");
     setUserId(null);
     setIsDialogOpen(true);
   };

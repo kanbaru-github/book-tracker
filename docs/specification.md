@@ -1,5 +1,10 @@
 # 仕様
 
+## 機能
+
+- Google booksへの検索機能
+- Google booksからライブラリ取得
+
 ## 使用技術
 
 - [npm](https://www.npmjs.com/)

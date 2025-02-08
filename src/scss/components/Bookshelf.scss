@@ -8,4 +8,26 @@
     font-weight: bold;
     margin-bottom: 20px;
   }
+
+  &__dialog {
+    position: absolute;
+    background-color: #f7fb83;
+    line-height: 1.5;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+
+    span {
+      font-weight: bold;
+      color: #ed4646;
+    }
+
+    input {
+      width: 12rem;
+      padding: 0.25rem;
+    }
+    button {
+      margin-left: 0.5rem;
+      background-color: #007bff;
+      color: #fff;
+    }
+  }
 }

@@ -95,7 +95,11 @@ const Bookshelf = () => {
         <p>
           Google BooksのユーザーIDを入力してください。
           <br />
-          <a href="https://books.google.com/books" target="_blank">
+          <a
+            href="https://books.google.com/books"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Google Booksサイト
           </a>
           のページURLから取得できます。

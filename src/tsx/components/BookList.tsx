@@ -11,7 +11,7 @@ const BookList = ({ books }: BookListProps) => {
     <ul className="book-list">
       {books ? (
         books.map(book => (
-          <li key={book.id}>
+          <li className="book-list__item" key={book.id}>
             {book.volumeInfo.imageLinks?.thumbnail && (
               <img
                 src={book.volumeInfo.imageLinks.thumbnail}
@@ -37,19 +37,20 @@ const BookList = ({ books }: BookListProps) => {
                 href={book.volumeInfo.infoLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="book-list__item-title"
               >
                 {book.volumeInfo.title}
                 <ExternalLink size={16} />
               </a>
             </h3>
 
-            <p className="author">
+            <p className="book-list__item-authors">
               {book.volumeInfo.authors?.join(", ") || "著者不明"}
             </p>
-            <p className="category">
+            <p className="book-list__item-category">
               {book.volumeInfo.categories?.join(", ") || "カテゴリ不明"}
             </p>
-            <p className="description">
+            <p className="book-list__item-description">
               {book.volumeInfo.description || "説明不明"}
             </p>
           </li>

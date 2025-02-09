@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
 import { HAVE_READ_SHELF_ID } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
+import { CircleX, Filter, Save } from "lucide-react";
 
 const Bookshelf = () => {
   const [books, setBooks] = useState<GoogleBook[]>([]);
@@ -70,15 +71,13 @@ const Bookshelf = () => {
     setIsDialogOpen(true);
   };
 
+  const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (isDialogOpen) {
-      const dialog = document.querySelector(
-        ".bookshelf__dialog"
-      ) as HTMLDialogElement;
-      dialog.querySelector("input")?.focus();
-      document.body.style.overflow = "hidden";
+      inputRef.current?.focus();
+      document.body.classList.add("dialog-open");
     } else {
-      document.body.style.overflow = "auto";
+      document.body.classList.remove("dialog-open");
     }
   }, [isDialogOpen]);
 
@@ -131,18 +130,25 @@ const Bookshelf = () => {
           className="bookshelf__deleteBtn"
           aria-label="Local StorageからGoogle BooksユーザーID削除"
         >
-          ユーザーIDを削除
+          ユーザーID 削除
+          <CircleX size={18} />
         </button>
       )}
 
-      <dialog open={isDialogOpen} className="bookshelf__dialog">
-        <p>
+      <dialog
+        open={isDialogOpen}
+        className="bookshelf__dialog"
+        aria-modal="true"
+      >
+        <h3 aria-labelledby="dialog-title">
           Google BooksのユーザーIDを入力してください。
-          <br />
+        </h3>
+        <p aria-labelledby="dialog-description">
           <a
             href="https://books.google.com/books"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Google Booksサイトを新しいタブで開く"
           >
             Google Booksサイト
           </a>
@@ -151,18 +157,29 @@ const Bookshelf = () => {
           例: https://books.google.com/books?uid=<span>123456789</span>
         </p>
         <form onSubmit={handleSetUserId}>
-          <input type="text" name="userId" placeholder="123456789" required />
+          <input
+            type="text"
+            inputMode="numeric"
+            pattern="\d+"
+            name="userId"
+            placeholder="123456789"
+            required
+            aria-required="true"
+          />
           <button type="submit" aria-label="Google BooksユーザーID設定">
-            設定
+            <Save size={16} />
           </button>
         </form>
       </dialog>
 
       <form className="bookshelf__filter">
         <fieldset>
-          <legend>書棚内検索</legend>
+          <legend>
+            書棚内検索
+            <Filter size={16} />
+          </legend>
 
-          <label>Title, Author, Description検索</label>
+          <label>Title / Author / Description</label>
           <input
             type="text"
             placeholder="キーワードを入力"
@@ -170,7 +187,7 @@ const Bookshelf = () => {
             onChange={e => setFilterText(e.target.value)}
           />
 
-          <label>Category検索</label>
+          <label>Category</label>
           <select
             value={filterCategory}
             onChange={e => setFilterCategory(e.target.value)}

@@ -4,25 +4,32 @@ import { HAVE_READ_SHELF_ID } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
 
-const USER_ID = import.meta.env.VITE_GOOGLE_BOOKS_USER_ID;
-const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
-
-/**
- * 書籍一覧
- * @returns {JSX.Element}
- */
 const Bookshelf = () => {
   const [books, setBooks] = useState<GoogleBook[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const maxResults = 40;
+
+  // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("googleBooksUserId");
+    if (storedUserId) {
+      setUserId(storedUserId);
+    } else {
+      setIsDialogOpen(true);
+    }
+  }, []);
+
+  // 2. ユーザーIDが取得できたら、Google Books APIを利用して読み込み中を表示
   useEffect(() => {
     const fetchBooks = async () => {
       setLoading(true);
-
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${USER_ID}/bookshelves/${HAVE_READ_SHELF_ID}/volumes?key=${API_KEY}`
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${HAVE_READ_SHELF_ID}/volumes?maxResults=${maxResults}`
         );
         const data = await response.json();
         const fetchedBooks = data.items || [];
@@ -35,12 +42,77 @@ const Bookshelf = () => {
       }
     };
 
-    fetchBooks();
-  }, []);
+    if (userId) {
+      fetchBooks();
+    }
+  }, [userId]);
+
+  const handleSetUserId = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const newUserId = formData.get("userId") as string;
+
+    if (newUserId) {
+      localStorage.setItem("googleBooksUserId", newUserId);
+      setUserId(newUserId);
+      setIsDialogOpen(false);
+    }
+  };
+
+  const removeUserId = () => {
+    localStorage.removeItem("googleBooksUserId");
+    setUserId(null);
+    setIsDialogOpen(true);
+  };
+
+  useEffect(() => {
+    if (isDialogOpen) {
+      const dialog = document.querySelector(
+        ".bookshelf__dialog"
+      ) as HTMLDialogElement;
+      dialog.querySelector("input")?.focus();
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "auto";
+    }
+  }, [isDialogOpen]);
 
   return (
     <section className="bookshelf">
       <h2>書棚</h2>
+
+      {isDialogOpen || (
+        <button
+          onClick={removeUserId}
+          className="bookshelf__deleteBtn"
+          aria-label="Google BooksユーザーID削除"
+        >
+          ユーザーIDを削除
+        </button>
+      )}
+
+      <dialog open={isDialogOpen} className="bookshelf__dialog">
+        <p>
+          Google BooksのユーザーIDを入力してください。
+          <br />
+          <a
+            href="https://books.google.com/books"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Google Booksサイト
+          </a>
+          のページURLから取得できます。
+          <br />
+          例: https://books.google.com/books?uid=<span>123456789</span>
+        </p>
+        <form onSubmit={handleSetUserId}>
+          <input type="text" name="userId" placeholder="123456789" required />
+          <button type="submit" aria-label="Google BooksユーザーID設定">
+            設定
+          </button>
+        </form>
+      </dialog>
 
       {loading ? (
         <div className="loading" role="status" aria-live="polite">

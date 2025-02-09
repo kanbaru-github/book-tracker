@@ -1,5 +1,9 @@
 export interface GoogleBook {
   id: string;
+  saleInfo: {
+    buyLink: string;
+    saleability: string;
+  };
   volumeInfo: {
     title: string;
     authors?: string[];

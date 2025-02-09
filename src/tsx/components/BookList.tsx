@@ -1,6 +1,5 @@
-import { useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
-import { Copy } from "lucide-react";
+import { ExternalLink, ShoppingBasket } from "lucide-react";
 import "../../scss/components/BookList.scss";
 
 type BookListProps = {
@@ -8,21 +7,9 @@ type BookListProps = {
 };
 
 const BookList = ({ books }: BookListProps) => {
-  const [copiedId, setCopiedId] = useState<string | null>(null);
-
-  const copyToClipboard = async (id: string) => {
-    try {
-      await navigator.clipboard.writeText(id);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
-    } catch (err) {
-      console.error("Failed to copy:", err);
-    }
-  };
-
   return (
     <ul className="book-list">
-      {books.map((book) => (
+      {books.map(book => (
         <li key={book.id}>
           {book.volumeInfo.imageLinks?.thumbnail && (
             <img
@@ -31,24 +18,39 @@ const BookList = ({ books }: BookListProps) => {
               loading="lazy"
             />
           )}
-          <h3>{book.volumeInfo.title}</h3>
+
+          {book.saleInfo.saleability === "FOR_SALE" && (
+            <a
+              href={book.saleInfo.buyLink}
+              className="book-list__sale"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              SALE!!
+              <ShoppingBasket size={16} />
+            </a>
+          )}
+
+          <h3>
+            <a
+              href={book.volumeInfo.infoLink}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {book.volumeInfo.title}
+              <ExternalLink size={16} />
+            </a>
+          </h3>
+
           <p className="author">
             {book.volumeInfo.authors?.join(", ") || "著者不明"}
           </p>
           <p className="category">
             {book.volumeInfo.categories?.join(", ") || "カテゴリ不明"}
           </p>
-          <div className="id-wrapper">
-            <code>{book.id}</code>
-            <button
-              onClick={() => copyToClipboard(book.id)}
-              title="IDをコピー"
-              aria-label={`${book.volumeInfo.title}のIDをコピー`}
-            >
-              <Copy size={16} />
-            </button>
-            {copiedId === book.id && <span>コピーしました</span>}
-          </div>
+          <p className="description">
+            {book.volumeInfo.description || "説明不明"}
+          </p>
         </li>
       ))}
     </ul>

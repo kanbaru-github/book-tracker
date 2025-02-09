@@ -63,6 +63,8 @@ const Bookshelf = () => {
   };
 
   const removeUserId = () => {
+    if (!confirm(`ユーザーIDを削除しますか？\nID: ${userId}`)) return;
+
     localStorage.removeItem("googleBooksUserId");
     setUserId(null);
     setIsDialogOpen(true);

@@ -1,6 +1,6 @@
 import "../../scss/components/MainVisual.scss";
 
-const MainVisual: React.FC = () => {
+const MainVisual = () => {
   return (
     <section className="main-visual">
       <h1>BOOK TRACKER</h1>

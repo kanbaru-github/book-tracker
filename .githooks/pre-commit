@@ -9,6 +9,9 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
+# Run format on tsx, scss, md, and html files only
+npx prettier --write "**/*.{tsx,scss,md,html}"
+
 # If we get here, linting passed
 echo "Linting passed. Proceeding with the commit."
 exit 0

@@ -8,6 +8,7 @@
 ## Command
 
 - Execute
+
 ```shell
 npx playwright test
 ```

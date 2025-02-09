@@ -9,7 +9,7 @@ type BookListProps = {
 const BookList = ({ books }: BookListProps) => {
   return (
     <ul className="book-list">
-      {books.map(book => (
+      { books ? books.map(book => (
         <li key={book.id}>
           {book.volumeInfo.imageLinks?.thumbnail && (
             <img
@@ -52,7 +52,9 @@ const BookList = ({ books }: BookListProps) => {
             {book.volumeInfo.description || "説明不明"}
           </p>
         </li>
-      ))}
+      )) : (
+        <li className="book-list__empty">書籍が見つかりませんでした。</li>
+      )}
     </ul>
   );
 };

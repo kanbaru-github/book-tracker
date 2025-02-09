@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
-import { HAVE_READ_SHELF_ID } from "../../ts/constants/google_book";
+import { BOOKSHELF_IDS, FAVORITE } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
-import { CircleX, Filter, Save } from "lucide-react";
+import { CircleX, Filter, LibraryBig, Save } from "lucide-react";
 
 const Bookshelf = () => {
   const [books, setBooks] = useState<GoogleBook[]>([]);
@@ -11,6 +11,7 @@ const Bookshelf = () => {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [shelfId, setShelfId] = useState(0);
   const [filteredBooks, setFilteredBooks] = useState<GoogleBook[]>([]);
   const [filterText, setFilterText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
@@ -33,7 +34,7 @@ const Bookshelf = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${HAVE_READ_SHELF_ID}/volumes?maxResults=${maxResults}`,
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`
         );
         const data = await response.json();
         const fetchedBooks = data.items || [];
@@ -49,7 +50,7 @@ const Bookshelf = () => {
     if (userId) {
       fetchBooks();
     }
-  }, [userId]);
+  }, [userId, shelfId]);
 
   const handleSetUserId = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -87,8 +88,8 @@ const Bookshelf = () => {
       books.reduce((acc: string[], book) => {
         const bookCategories = book.volumeInfo.categories || [];
         return acc.concat(bookCategories);
-      }, []),
-    ),
+      }, [])
+    )
   );
 
   /**
@@ -171,6 +172,29 @@ const Bookshelf = () => {
           </button>
         </form>
       </dialog>
+
+      <form className="bookshelf__choice">
+        <fieldset>
+          <legend>
+            書棚選択
+            <LibraryBig size={16} />
+          </legend>
+          <select
+            value={shelfId}
+            onChange={e => setShelfId(Number(e.target.value))}
+          >
+            {Object.entries(BOOKSHELF_IDS).map(([id, name]) => (
+              <option
+                key={id}
+                value={id}
+                {...(Number(id) === FAVORITE && { selected: true })}
+              >
+                {name}
+              </option>
+            ))}
+          </select>
+        </fieldset>
+      </form>
 
       <form className="bookshelf__filter">
         <fieldset>

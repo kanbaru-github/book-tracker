@@ -85,7 +85,7 @@ const Bookshelf = () => {
         <button
           onClick={removeUserId}
           className="bookshelf__deleteBtn"
-          area-label="Google BooksユーザーID削除"
+          aria-label="Google BooksユーザーID削除"
         >
           ユーザーIDを削除
         </button>

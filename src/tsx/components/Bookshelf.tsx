@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
 import { HAVE_READ_SHELF_ID } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
@@ -10,6 +10,9 @@ const Bookshelf = () => {
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [filteredBooks, setFilteredBooks] = useState<GoogleBook[]>([]);
+  const [filterText, setFilterText] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
 
   const maxResults = 40;
 
@@ -77,6 +80,45 @@ const Bookshelf = () => {
     }
   }, [isDialogOpen]);
 
+  /** 一意のカテゴリー配列 */
+  const categories = Array.from(
+    new Set(
+      books.reduce((acc: string[], book) => {
+        const bookCategories = book.volumeInfo.categories || [];
+        return acc.concat(bookCategories);
+      }, [])
+    )
+  );
+
+  /**
+   * フィルター処理(メモ化)
+   */
+  const handleFilterBooks = useCallback(() => {
+    const filtered = books.filter(book => {
+      const title = book.volumeInfo.title.toLowerCase();
+      const author = book.volumeInfo.authors?.join(" ") || "";
+      const description = book.volumeInfo.description || "";
+      const categories = book.volumeInfo.categories || [];
+
+      const isMatchedText =
+        title.includes(filterText.toLowerCase()) ||
+        author.toLowerCase().includes(filterText.toLowerCase()) ||
+        description.toLowerCase().includes(filterText.toLowerCase());
+
+      const isMatchedCategory = filterCategory
+        ? categories.includes(filterCategory)
+        : true;
+
+      return isMatchedText && isMatchedCategory;
+    });
+
+    setFilteredBooks(filtered);
+  }, [filterText, filterCategory, books]);
+
+  useEffect(() => {
+    handleFilterBooks();
+  }, [filterText, filterCategory, books, handleFilterBooks]);
+
   return (
     <section className="bookshelf">
       <h2>書棚</h2>
@@ -85,7 +127,7 @@ const Bookshelf = () => {
         <button
           onClick={removeUserId}
           className="bookshelf__deleteBtn"
-          aria-label="Google BooksユーザーID削除"
+          aria-label="Local StorageからGoogle BooksユーザーID削除"
         >
           ユーザーIDを削除
         </button>
@@ -114,6 +156,33 @@ const Bookshelf = () => {
         </form>
       </dialog>
 
+      <form className="bookshelf__filter">
+        <fieldset>
+          <legend>書棚内検索</legend>
+
+          <label>Title, Author, Description検索</label>
+          <input
+            type="text"
+            placeholder="キーワードを入力"
+            value={filterText}
+            onChange={e => setFilterText(e.target.value)}
+          />
+
+          <label>Category検索</label>
+          <select
+            value={filterCategory}
+            onChange={e => setFilterCategory(e.target.value)}
+          >
+            <option value="">選択してください</option>
+            {categories.map(category => (
+              <option key={category} value={category}>
+                {category}
+              </option>
+            ))}
+          </select>
+        </fieldset>
+      </form>
+
       {loading ? (
         <div className="loading" role="status" aria-live="polite">
           読み込み中...
@@ -123,7 +192,7 @@ const Bookshelf = () => {
           {error}
         </div>
       ) : (
-        <BookList books={books} />
+        <BookList books={filteredBooks} />
       )}
     </section>
   );

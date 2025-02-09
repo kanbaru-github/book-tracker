@@ -18,8 +18,10 @@
     padding: 0.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     cursor: pointer;
+    margin: 0 auto 1.5rem;
     &:hover {
       box-shadow: none;
+      filter: brightness(1.1);
     }
   }
 
@@ -44,6 +46,49 @@
       margin-left: 0.5rem;
       background-color: #007bff;
       color: #fff;
+    }
+  }
+
+  &__filter {
+    justify-content: space-between;
+    margin-bottom: 1rem;
+
+    fieldset {
+      padding: 0.5rem;
+      border: 3px double #ddd;
+      border-radius: 0.5rem;
+    }
+
+    legend {
+      font-size: 1.2rem;
+      font-weight: bold;
+      background-color: #f7fb83;
+      border-radius: 1rem;
+      padding: 0.5rem 1rem;
+    }
+
+    label {
+      font-size: 1rem;
+      font-weight: bold;
+      margin: 0 auto 0.5rem;
+      display: block;
+    }
+
+    input {
+      width: 80%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      margin: 0 auto 1rem;
+    }
+
+    select {
+      width: 80%;
+      padding: 0.5rem;
+      border: 1px solid #ddd;
+      border-radius: 0.5rem;
+      margin: 0 auto 1rem;
+      text-align: center;
     }
   }
 }

@@ -8,5 +8,6 @@ export interface GoogleBook {
     imageLinks?: {
       thumbnail: string;
     };
+    infoLink: string;
   };
 }

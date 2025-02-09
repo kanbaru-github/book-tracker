@@ -4,7 +4,7 @@ import { HAVE_READ_SHELF_ID } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
 
-const Bookshelf: React.FC = () => {
+const Bookshelf = () => {
   const [books, setBooks] = useState<GoogleBook[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

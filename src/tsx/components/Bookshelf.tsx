@@ -15,6 +15,7 @@ const Bookshelf = () => {
   const [filteredBooks, setFilteredBooks] = useState<GoogleBook[]>([]);
   const [filterText, setFilterText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
 
   // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
   useEffect(() => {
@@ -89,15 +90,18 @@ const Bookshelf = () => {
     }
   }, [isDialogOpen]);
 
-  /** 一意のカテゴリー配列 */
-  const categories = Array.from(
-    new Set(
-      books.reduce((acc: string[], book) => {
-        const bookCategories = book.volumeInfo.categories || [];
-        return acc.concat(bookCategories);
-      }, []),
-    ),
-  );
+  // filteredBooksの内容が変わるたびにcategoriesを更新
+  useEffect(() => {
+    const uniqueCategories = Array.from(
+      new Set(
+        filteredBooks.reduce((acc: string[], book) => {
+          const bookCategories = book.volumeInfo.categories || [];
+          return acc.concat(bookCategories);
+        }, []),
+      ),
+    );
+    setCategories(uniqueCategories);
+  }, [filteredBooks]);
 
   /**
    * フィルター処理(メモ化)

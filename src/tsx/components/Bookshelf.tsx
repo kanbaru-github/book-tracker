@@ -34,7 +34,7 @@ const Bookshelf = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`,
         );
         const data = await response.json();
         const fetchedBooks = data.items || [];
@@ -88,8 +88,8 @@ const Bookshelf = () => {
       books.reduce((acc: string[], book) => {
         const bookCategories = book.volumeInfo.categories || [];
         return acc.concat(bookCategories);
-      }, [])
-    )
+      }, []),
+    ),
   );
 
   /**

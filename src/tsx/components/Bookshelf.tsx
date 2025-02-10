@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
-import { BOOKSHELF_IDS, FAVORITE } from "../../ts/constants/google_book";
+import { BOOKSHELF_IDS } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
 import { CircleX, Filter, LibraryBig, Save } from "lucide-react";
@@ -34,7 +34,7 @@ const Bookshelf = () => {
       setLoading(true);
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`,
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`
         );
         const data = await response.json();
         const fetchedBooks = data.items || [];
@@ -88,8 +88,8 @@ const Bookshelf = () => {
       books.reduce((acc: string[], book) => {
         const bookCategories = book.volumeInfo.categories || [];
         return acc.concat(bookCategories);
-      }, []),
-    ),
+      }, [])
+    )
   );
 
   /**
@@ -184,11 +184,7 @@ const Bookshelf = () => {
             onChange={e => setShelfId(Number(e.target.value))}
           >
             {Object.entries(BOOKSHELF_IDS).map(([id, name]) => (
-              <option
-                key={id}
-                value={id}
-                {...(Number(id) === FAVORITE && { selected: true })}
-              >
+              <option key={id} value={id}>
                 {name}
               </option>
             ))}
@@ -203,16 +199,18 @@ const Bookshelf = () => {
             <Filter size={16} />
           </legend>
 
-          <label>Title / Author / Description</label>
+          <label htmlFor="filter-text">Title / Author / Description</label>
           <input
             type="text"
             placeholder="キーワードを入力"
+            id="filter-text"
             value={filterText}
             onChange={e => setFilterText(e.target.value)}
           />
 
-          <label>Category</label>
+          <label htmlFor="filter-category">Category</label>
           <select
+            id="filter-category"
             value={filterCategory}
             onChange={e => setFilterCategory(e.target.value)}
           >

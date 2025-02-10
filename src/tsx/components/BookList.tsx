@@ -26,6 +26,7 @@ const BookList = ({ books }: BookListProps) => {
                 className="book-list__sale"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label={`セール中 - ${book.volumeInfo.title}の購入ページを新しいタブで開く`}
               >
                 SALE!!
                 <ShoppingBasket size={16} />

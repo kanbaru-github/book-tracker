@@ -16,8 +16,6 @@ const Bookshelf = () => {
   const [filterText, setFilterText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
 
-  const maxResults = 40;
-
   // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
   useEffect(() => {
     const storedUserId = localStorage.getItem("googleBooksUserId");
@@ -28,14 +26,22 @@ const Bookshelf = () => {
     }
   }, []);
 
-  // 2. ユーザーIDが取得できたら、Google Books APIを利用して読み込み中を表示
+  // FIXME:別課題で可変になるように修正
+  const maxResults = 40;
+
   useEffect(() => {
+    /**
+     * Google Books APIを利用し公開書棚を取得
+     */
     const fetchBooks = async () => {
       setLoading(true);
       try {
         const response = await fetch(
           `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`,
         );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
         const fetchedBooks = data.items || [];
         setBooks(fetchedBooks);
@@ -65,6 +71,7 @@ const Bookshelf = () => {
   };
 
   const removeUserId = () => {
+    if (!userId) return;
     if (!confirm(`ユーザーIDを削除しますか？\nID: ${userId}`)) return;
 
     localStorage.removeItem("googleBooksUserId");
@@ -96,6 +103,7 @@ const Bookshelf = () => {
    * フィルター処理(メモ化)
    */
   const handleFilterBooks = useCallback(() => {
+    const searchText = filterText.toLowerCase();
     const filtered = books.filter(book => {
       const title = book.volumeInfo.title.toLowerCase();
       const author = book.volumeInfo.authors?.join(" ") || "";
@@ -103,9 +111,9 @@ const Bookshelf = () => {
       const categories = book.volumeInfo.categories || [];
 
       const isMatchedText =
-        title.includes(filterText.toLowerCase()) ||
-        author.toLowerCase().includes(filterText.toLowerCase()) ||
-        description.toLowerCase().includes(filterText.toLowerCase());
+        title.includes(searchText) ||
+        author.toLowerCase().includes(searchText) ||
+        description.toLowerCase().includes(searchText);
 
       const isMatchedCategory = filterCategory
         ? categories.includes(filterCategory)
@@ -182,6 +190,7 @@ const Bookshelf = () => {
           <select
             value={shelfId}
             onChange={e => setShelfId(Number(e.target.value))}
+            aria-label="書棚選択"
           >
             {Object.entries(BOOKSHELF_IDS).map(([id, name]) => (
               <option key={id} value={id}>

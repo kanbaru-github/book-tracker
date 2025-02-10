@@ -44,5 +44,4 @@ npm run preview
 
 ## 環境変数
 
-- 環境変数は[Actions secrets and variables
-](https://github.com/kanbaru-github/book-tracker/settings/secrets/actions)で設定
+- 環境変数は[Actions secrets and variables](https://github.com/kanbaru-github/book-tracker/settings/secrets/actions)で設定

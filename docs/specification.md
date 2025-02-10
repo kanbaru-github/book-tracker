@@ -3,7 +3,8 @@
 ## 機能
 
 - Google booksへの検索機能
-- Google booksからライブラリ取得
+- Google booksからユーザーの公開書棚取得
+  - 書籍タイトル、著者、カテゴリーによる絞り込み機能
 
 ## 使用技術
 
@@ -12,6 +13,7 @@
 - [Vite](https://vitejs.dev/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [Sass](https://sass-lang.com/)
+- [Lucide](https://lucide.dev/)
 
 ## APIs
 

@@ -16,8 +16,8 @@ const BookSearch = () => {
     try {
       const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(
-          query
-        )}&maxResults=10`
+          query,
+        )}&maxResults=10`,
       );
       const data = await response.json();
       setResults(data.items || []);
@@ -38,8 +38,8 @@ const BookSearch = () => {
           type="text"
           name="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && searchBooks()}
+          onChange={e => setQuery(e.target.value)}
+          onKeyDown={e => e.key === "Enter" && searchBooks()}
           placeholder="書籍名や著者名で検索..."
         />
         <button

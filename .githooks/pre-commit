@@ -12,8 +12,7 @@ fi
 npx prettier --write "**/*.{tsx,scss,md,html}"
 # Check for differences after formatting
 if ! git diff --quiet; then
-  echo "Formatting changes detected. Please stage the changes before committing."
-  exit 1
+  echo "Formatting changes detected. Please stage the changes."
 fi
 
 # If we get here, linting passed

@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
-import { BOOKSHELF_IDS } from "../../ts/constants/google_book";
+import { BOOKSHELF_IDS, MAX_RESULTS } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
 import BookList from "./BookList";
 import { CircleX, Filter, LibraryBig, Save } from "lucide-react";
+import Loading from "./Loading";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Bookshelf = () => {
   const [books, setBooks] = useState<GoogleBook[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -16,8 +17,11 @@ const Bookshelf = () => {
   const [filterText, setFilterText] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
+  const [startIndex, setStartIndex] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
 
-  // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
+  // ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
   useEffect(() => {
     const storedUserId = localStorage.getItem("googleBooksUserId");
     if (storedUserId) {
@@ -27,37 +31,65 @@ const Bookshelf = () => {
     }
   }, []);
 
-  // FIXME:別課題で可変になるように修正
-  const maxResults = 40;
-
   useEffect(() => {
-    /**
-     * Google Books APIを利用し公開書棚を取得
-     */
+    const fetchBookshelfInfo = async () => {
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+        const response = await fetch(
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}`,
+          { signal: controller.signal },
+        );
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTotalItems(data.volumeCount || 0);
+      } catch (err) {
+        setError("書棚情報の取得に失敗しました");
+        console.error(err);
+      }
+    };
+
+    if (userId && shelfId) {
+      fetchBookshelfInfo();
+    }
+  }, [userId, shelfId]);
+
+  // ユーザーIDが取得できたら、Google Books APIを利用して読み込み中を表示
+  useEffect(() => {
     const fetchBooks = async () => {
-      setLoading(true);
       try {
         const response = await fetch(
-          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?maxResults=${maxResults}`,
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}/volumes?startIndex=${startIndex}&maxResults=${MAX_RESULTS}`,
         );
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
         const fetchedBooks = data.items || [];
-        setBooks(fetchedBooks);
+
+        setBooks(prevBooks => {
+          const newBooks = [...prevBooks, ...fetchedBooks];
+          const uniqueBooks = Array.from(
+            new Set(newBooks.map(book => book.id)),
+          ).map(id => newBooks.find(book => book.id === id));
+          return uniqueBooks;
+        });
+
+        setHasMore(books.length < totalItems);
       } catch (err) {
         setError("書籍データの取得に失敗しました");
         console.error(err);
-      } finally {
-        setLoading(false);
       }
     };
 
     if (userId) {
       fetchBooks();
     }
-  }, [userId, shelfId]);
+  }, [userId, shelfId, startIndex, books.length, totalItems]);
 
   const handleSetUserId = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -90,19 +122,6 @@ const Bookshelf = () => {
     }
   }, [isDialogOpen]);
 
-  // filteredBooksの内容が変わるたびにcategoriesを更新
-  useEffect(() => {
-    const uniqueCategories = Array.from(
-      new Set(
-        filteredBooks.reduce((acc: string[], book) => {
-          const bookCategories = book.volumeInfo.categories || [];
-          return acc.concat(bookCategories);
-        }, []),
-      ),
-    );
-    setCategories(uniqueCategories);
-  }, [filteredBooks]);
-
   /**
    * フィルター処理(メモ化)
    */
@@ -132,6 +151,21 @@ const Bookshelf = () => {
   useEffect(() => {
     handleFilterBooks();
   }, [filterText, filterCategory, books, handleFilterBooks]);
+
+  // filteredBooksの内容が変わるたびにcategoriesを更新
+  useEffect(() => {
+    const uniqueCategories = Array.from(
+      new Set(
+        filteredBooks.reduce((acc: string[], book) => {
+          const bookCategories = book.volumeInfo.categories || [];
+          return acc.concat(bookCategories);
+        }, []),
+      ),
+    );
+    setCategories(uniqueCategories);
+  }, [filteredBooks]);
+
+  const MemorizedBookList = memo(BookList);
 
   return (
     <section className="bookshelf">
@@ -178,6 +212,7 @@ const Bookshelf = () => {
             placeholder="123456789"
             required
             aria-required="true"
+            ref={inputRef}
           />
           <button type="submit" aria-label="Google BooksユーザーID設定">
             <Save size={16} />
@@ -193,7 +228,11 @@ const Bookshelf = () => {
           </legend>
           <select
             value={shelfId}
-            onChange={e => setShelfId(Number(e.target.value))}
+            onChange={e => {
+              setShelfId(Number(e.target.value));
+              setBooks([]);
+              setStartIndex(0);
+            }}
             aria-label="書棚選択"
           >
             {Object.entries(BOOKSHELF_IDS).map(([id, name]) => (
@@ -237,16 +276,20 @@ const Bookshelf = () => {
         </fieldset>
       </form>
 
-      {loading ? (
-        <div className="loading" role="status" aria-live="polite">
-          読み込み中...
-        </div>
-      ) : error ? (
-        <div className="error" role="alert" aria-live="assertive">
+      <InfiniteScroll
+        dataLength={books.length}
+        next={() => setStartIndex(prevIndex => prevIndex + MAX_RESULTS)}
+        hasMore={hasMore}
+        loader={<Loading />}
+        endMessage={<p className="bookshelf__fetch-all-msg">That's all</p>}
+      >
+        <MemorizedBookList books={filteredBooks} />
+      </InfiniteScroll>
+
+      {error && (
+        <div className="bookshelf__error" role="alert" aria-live="assertive">
           {error}
         </div>
-      ) : (
-        <BookList books={filteredBooks} />
       )}
     </section>
   );

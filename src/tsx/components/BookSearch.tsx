@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { GoogleBook } from "../../ts/types/google_book";
 import "../../scss/components/BookSearch.scss";
 import BookList from "./BookList";
+import Loading from "./Loading";
 
 const BookSearch = () => {
   const [query, setQuery] = useState("");
@@ -30,10 +31,10 @@ const BookSearch = () => {
   };
 
   return (
-    <section className="search-section">
+    <section className="book-search">
       <h2>書籍検索</h2>
 
-      <div className="search-section__input-container">
+      <div className="book-search__input-container">
         <input
           type="text"
           name="search"
@@ -45,17 +46,13 @@ const BookSearch = () => {
         <button
           onClick={searchBooks}
           disabled={isSearching}
-          aria-label="検索実行"
+          aria-label="書籍検索実行"
         >
           <Search size={15} />
         </button>
       </div>
 
-      {isSearching ? (
-        <div className="search-section__loading">検索中...</div>
-      ) : (
-        <BookList books={results} />
-      )}
+      {isSearching ? <Loading /> : <BookList books={results} />}
     </section>
   );
 };

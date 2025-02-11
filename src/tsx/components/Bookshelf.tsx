@@ -169,7 +169,10 @@ const Bookshelf = () => {
 
   return (
     <section className="bookshelf" id="bookshelf">
-      <h2><LibraryBig size={24} />書棚</h2>
+      <h2>
+        <LibraryBig size={24} />
+        書棚
+      </h2>
 
       {isDialogOpen || (
         <button

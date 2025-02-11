@@ -26,7 +26,7 @@ const smoothScroll = () => {
       if (header && href) {
         const target = document.getElementById(href.replace("#", ""));
         if (target) {
-          const headerHeight = header.offsetHeight
+          const headerHeight = header.offsetHeight;
           const targetPosition = target.offsetTop - headerHeight;
           console.log(targetPosition);
           scrollTo({

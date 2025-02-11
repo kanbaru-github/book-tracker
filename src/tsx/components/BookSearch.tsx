@@ -32,7 +32,10 @@ const BookSearch = () => {
 
   return (
     <section className="book-search" id="book-search">
-      <h2><Search size={24} />書籍検索</h2>
+      <h2>
+        <Search size={24} />
+        書籍検索
+      </h2>
 
       <div className="book-search__input-container">
         <input

@@ -12,4 +12,4 @@ export const BOOKSHELF_IDS: { [key: number]: string } = {
 };
 
 /** Google Books APIの取得件数(最大値) */
-export const MAX_RESULTS = 10;
+export const MAX_RESULTS = 40;

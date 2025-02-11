@@ -18,9 +18,10 @@ const Bookshelf = () => {
   const [filterCategory, setFilterCategory] = useState("");
   const [categories, setCategories] = useState<string[]>([]);
   const [startIndex, setStartIndex] = useState(0);
+  const [totalItems, setTotalItems] = useState(0);
   const [hasMore, setHasMore] = useState(true);
 
-  // 1. ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
+  // ユーザーIDをローカルストレージから取得 無ければdialogを表示して登録を促す
   useEffect(() => {
     const storedUserId = localStorage.getItem("googleBooksUserId");
     if (storedUserId) {
@@ -30,7 +31,29 @@ const Bookshelf = () => {
     }
   }, []);
 
-  // 2. ユーザーIDが取得できたら、Google Books APIを利用して読み込み中を表示
+  useEffect(() => {
+    const fetchBookshelfInfo = async () => {
+      try {
+        const response = await fetch(
+          `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}`,
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setTotalItems(data.volumeCount || 0);
+      } catch (err) {
+        setError("書棚情報の取得に失敗しました");
+        console.error(err);
+      }
+    };
+
+    if (userId && shelfId) {
+      fetchBookshelfInfo();
+    }
+  }, [userId, shelfId]);
+
+  // ユーザーIDが取得できたら、Google Books APIを利用して読み込み中を表示
   useEffect(() => {
     const fetchBooks = async () => {
       try {
@@ -43,7 +66,6 @@ const Bookshelf = () => {
         const data = await response.json();
         const fetchedBooks = data.items || [];
 
-        // 重複を排除して書籍を追加
         setBooks(prevBooks => {
           const newBooks = [...prevBooks, ...fetchedBooks];
           const uniqueBooks = Array.from(
@@ -52,15 +74,7 @@ const Bookshelf = () => {
           return uniqueBooks;
         });
 
-        setFilteredBooks(prevBooks => {
-          const newBooks = [...prevBooks, ...fetchedBooks];
-          const uniqueBooks = Array.from(
-            new Set(newBooks.map(book => book.id)),
-          ).map(id => newBooks.find(book => book.id === id));
-          return uniqueBooks;
-        });
-
-        setHasMore(fetchedBooks.length === MAX_RESULTS);
+        setHasMore(books.length < totalItems);
       } catch (err) {
         setError("書籍データの取得に失敗しました");
         console.error(err);
@@ -70,7 +84,7 @@ const Bookshelf = () => {
     if (userId) {
       fetchBooks();
     }
-  }, [userId, shelfId, startIndex]);
+  }, [userId, shelfId, startIndex, books.length, totalItems]);
 
   const handleSetUserId = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -260,7 +274,7 @@ const Bookshelf = () => {
         next={() => setStartIndex(prevIndex => prevIndex + MAX_RESULTS)}
         hasMore={hasMore}
         loader={<Loading />}
-        endMessage={<p>No more books to load</p>}
+        endMessage={<p className="bookshelf__fetch-all-msg">That's all</p>}
       >
         <BookList books={filteredBooks} />
       </InfiniteScroll>

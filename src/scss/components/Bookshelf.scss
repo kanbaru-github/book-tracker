@@ -109,4 +109,10 @@
   &__filter {
     @include form(#f7fb83);
   }
+
+  &__fetch-all-msg {
+    font-size: 1.5rem;
+    font-weight: bold;
+    font-family: serif;
+  }
 }

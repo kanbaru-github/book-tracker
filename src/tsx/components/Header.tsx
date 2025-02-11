@@ -24,7 +24,7 @@ const Header = () => {
         </h2>
         <ul className="header__links">
           <li>
-            <a href="#book-search" aria-label="書籍検索セクセンションへ移動">
+            <a href="#book-search" aria-label="書籍検索セクションへ移動">
               <Search size={16} />
               書籍検索
             </a>

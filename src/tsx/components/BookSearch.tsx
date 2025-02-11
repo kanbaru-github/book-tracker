@@ -31,10 +31,10 @@ const BookSearch = () => {
   };
 
   return (
-    <section className="search-section">
+    <section className="book-search">
       <h2>書籍検索</h2>
 
-      <div className="search-section__input-container">
+      <div className="book-search__input-container">
         <input
           type="text"
           name="search"
@@ -46,19 +46,13 @@ const BookSearch = () => {
         <button
           onClick={searchBooks}
           disabled={isSearching}
-          aria-label="検索実行"
+          aria-label="書籍検索実行"
         >
           <Search size={15} />
         </button>
       </div>
 
-      {isSearching ? (
-        <div className="search-section__loading">
-          <Loading />
-        </div>
-      ) : (
-        <BookList books={results} />
-      )}
+      {isSearching ? <Loading /> : <BookList books={results} />}
     </section>
   );
 };

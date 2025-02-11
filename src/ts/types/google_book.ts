@@ -4,7 +4,7 @@ export interface GoogleBook {
     /** 購入リンク */
     buyLink: string;
     /** 販売状態 */
-    saleability: "FOR_SALE" | "NOT_FOR_SALE" | "FREE";
+    saleability: "FOR_SALE" | "FREE" | "NOT_FOR_SALE" | "FOR_PREORDER";
   };
   volumeInfo: {
     title: string;

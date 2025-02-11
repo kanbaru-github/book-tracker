@@ -1,8 +1,10 @@
 export interface GoogleBook {
   id: string;
   saleInfo: {
+    /** 購入リンク */
     buyLink: string;
-    saleability: string;
+    /** 販売状態 */
+    saleability: "FOR_SALE" | "NOT_FOR_SALE" | "FREE";
   };
   volumeInfo: {
     title: string;

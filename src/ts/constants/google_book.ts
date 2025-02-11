@@ -10,3 +10,6 @@ export const BOOKSHELF_IDS: { [key: number]: string } = {
   [READING_NOW]: "読書中",
   [HAVE_READ]: "既読",
 };
+
+/** Google Books APIの取得件数(最大値) */
+export const MAX_RESULTS = 10;

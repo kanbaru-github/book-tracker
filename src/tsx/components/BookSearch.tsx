@@ -3,6 +3,7 @@ import { Search } from "lucide-react";
 import { GoogleBook } from "../../ts/types/google_book";
 import "../../scss/components/BookSearch.scss";
 import BookList from "./BookList";
+import Loading from "./Loading";
 
 const BookSearch = () => {
   const [query, setQuery] = useState("");
@@ -52,7 +53,9 @@ const BookSearch = () => {
       </div>
 
       {isSearching ? (
-        <div className="search-section__loading">検索中...</div>
+        <div className="search-section__loading">
+          <Loading />
+        </div>
       ) : (
         <BookList books={results} />
       )}

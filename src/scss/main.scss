@@ -1,3 +1,8 @@
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 70px;
+}
+
 body {
   margin: 0;
   min-width: 320px;
@@ -6,4 +11,8 @@ body {
   &.dialog-open {
     overflow: hidden;
   }
+}
+
+a {
+  text-decoration: none;
 }

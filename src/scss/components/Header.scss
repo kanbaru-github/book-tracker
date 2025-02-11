@@ -19,8 +19,10 @@
     margin: 0 auto;
 
     &-logo {
-      margin: 0;
+      margin: 0 auto;
+      width: fit-content;
       line-height: 1;
+      text-align: center;
 
       a {
         font-size: 1.5rem;
@@ -52,7 +54,6 @@
       a {
         font-size: 1.2rem;
         font-weight: bold;
-        text-decoration: none;
         font-family: serif;
         color: #333;
 

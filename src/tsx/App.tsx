@@ -6,15 +6,17 @@ import Header from "./components/Header";
 
 function App() {
   return (
-    <main className="max-w-6xl mx-auto p-4">
+    <>
       <Header />
 
-      <MainVisual />
+      <main className="max-w-6xl mx-auto p-4">
+        <MainVisual />
 
-      <BookSearch />
+        <BookSearch />
 
-      <Bookshelf />
-    </main>
+        <Bookshelf />
+      </main>
+    </>
   );
 }
 

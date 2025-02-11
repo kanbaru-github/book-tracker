@@ -41,6 +41,10 @@ test("has title", async ({ page }) => {
 test("Header component", async ({ page }) => {
   await page.goto("/");
 
+  // 固定ヘッダーのテスト
+  await page.evaluate(() => scrollTo(0, 100));
+  await expect(page.locator(".header--fixed")).toBeVisible();
+
   await expect(page.locator(".header")).toBeVisible();
   await page.click('.header a[href="#book-search"]');
   await page.click('.header a[href="#bookshelf"]');

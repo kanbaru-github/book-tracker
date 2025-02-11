@@ -1,4 +1,4 @@
-export interface GoogleBook {
+export type GoogleBook = {
   id: string;
   saleInfo: {
     /** 購入リンク */

@@ -38,6 +38,22 @@ test("has title", async ({ page }) => {
   expect(errors).toHaveLength(0);
 });
 
+test("Header component", async ({ page }) => {
+  await page.goto("/");
+
+  // 固定ヘッダーのテスト
+  await page.evaluate(() => scrollTo(0, 100));
+  await expect(page.locator(".header--fixed")).toBeVisible();
+
+  await expect(page.locator(".header")).toBeVisible();
+  await page.click('.header a[href="#book-search"]');
+  await page.click('.header a[href="#bookshelf"]');
+  await page.click('.header a[href="#root"]');
+
+  const errors = setupConsoleErrCapture(page);
+  expect(errors).toHaveLength(0);
+});
+
 test("BookSearch component", async ({ page }) => {
   await page.goto("/");
 

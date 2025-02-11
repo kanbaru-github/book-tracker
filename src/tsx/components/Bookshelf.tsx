@@ -168,8 +168,11 @@ const Bookshelf = () => {
   const MemorizedBookList = memo(BookList);
 
   return (
-    <section className="bookshelf">
-      <h2>書棚</h2>
+    <section className="bookshelf" id="bookshelf">
+      <h2>
+        <LibraryBig size={24} />
+        書棚
+      </h2>
 
       {isDialogOpen || (
         <button

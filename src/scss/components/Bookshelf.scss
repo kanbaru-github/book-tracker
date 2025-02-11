@@ -54,6 +54,9 @@
     font-weight: bold;
     font-family: serif;
     margin-bottom: 20px;
+    svg {
+      margin-right: 0.5rem;
+    }
   }
 
   &__deleteBtn {

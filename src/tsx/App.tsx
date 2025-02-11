@@ -10,9 +10,6 @@ function App() {
   const [isTop, setIsTop] = useState(true);
 
   useEffect(() => {
-    /**
-     * 最初の画面からスクロールしていたらfalseにする
-     */
     const handleIsTop = () => {
       setIsTop(scrollY === 0);
     };

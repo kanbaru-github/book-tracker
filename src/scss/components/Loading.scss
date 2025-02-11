@@ -1,3 +1,5 @@
+@use "../foundation/_media.scss" as media;
+
 @keyframes spin {
   from {
     transform: rotate(0);
@@ -7,6 +9,8 @@
   }
 }
 
+$spinner-color: rgb(63, 249, 220);
+
 .loading-circle {
   width: 8rem;
   height: 8rem;
@@ -15,6 +19,10 @@
   align-items: center;
   background-color: transparent;
   margin: 0 auto;
+  @include media.pc {
+    width: 10rem;
+    height: 10rem;
+  }
 
   &-border {
     width: 5rem;
@@ -24,11 +32,11 @@
     justify-content: center;
     align-items: center;
     border-radius: 50%;
-    background: rgb(63, 249, 220);
+    background: $spinner-color;
     background: linear-gradient(
       0deg,
-      rgba(63, 249, 220, 0.1) 33%,
-      rgba(63, 249, 220, 1) 100%
+      rgba($spinner-color, 0.1) 33%,
+      rgba($spinner-color, 1) 100%
     );
     animation: spin 0.8s linear 0s infinite;
   }

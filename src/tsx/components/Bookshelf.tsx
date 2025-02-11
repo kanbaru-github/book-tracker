@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { memo, useCallback, useEffect, useRef, useState } from "react";
 import { GoogleBook } from "../../ts/types/google_book";
 import { BOOKSHELF_IDS, MAX_RESULTS } from "../../ts/constants/google_book";
 import "../../scss/components/Bookshelf.scss";
@@ -34,9 +34,14 @@ const Bookshelf = () => {
   useEffect(() => {
     const fetchBookshelfInfo = async () => {
       try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
         const response = await fetch(
           `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelfId}`,
+          { signal: controller.signal },
         );
+        clearTimeout(timeoutId);
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -160,6 +165,8 @@ const Bookshelf = () => {
     setCategories(uniqueCategories);
   }, [filteredBooks]);
 
+  const MemorizedBookList = memo(BookList);
+
   return (
     <section className="bookshelf">
       <h2>書棚</h2>
@@ -276,11 +283,11 @@ const Bookshelf = () => {
         loader={<Loading />}
         endMessage={<p className="bookshelf__fetch-all-msg">That's all</p>}
       >
-        <BookList books={filteredBooks} />
+        <MemorizedBookList books={filteredBooks} />
       </InfiniteScroll>
 
       {error && (
-        <div className="error" role="alert" aria-live="assertive">
+        <div className="bookshelf__error" role="alert" aria-live="assertive">
           {error}
         </div>
       )}

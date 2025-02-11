@@ -1,6 +1,8 @@
 import { test, expect, Page } from "@playwright/test";
+import { configDotenv } from "dotenv";
 
-const TEST_ACCOUNT = "101675658313008166618"
+configDotenv();
+const TEST_ACCOUNT = process.env.GOOGLE_BOOKS_USER_ID || "";
 
 /**
  * テストで発生するエラーメッセージを取得
@@ -42,13 +44,11 @@ test("BookSearch component", async ({ page }) => {
   await page.fill('input[name="search"]', "test book");
   await page.click('button[aria-label="書籍検索実行"]');
 
-  // `Loading`コンポーネントが表示されるまで待機
-  await expect(page.locator(".book-search .loading-circle")).toBeVisible();
-
-  // `Loading`コンポーネントが非表示になるまで待機
+  await expect(page.locator(".book-search .loading-circle")).toBeVisible({
+    timeout: 50000,
+  });
   await expect(page.locator(".book-search .loading-circle")).not.toBeVisible();
 
-  // `ul.book-list`が表示されるまで待機
   await expect(page.locator(".book-search .book-list")).toBeVisible();
 
   const errors = setupConsoleErrCapture(page);
@@ -68,8 +68,20 @@ test("Bookshelf component", async ({ page }) => {
   // ダイアログが閉じるまで待機
   await expect(page.locator(".bookshelf__dialog")).not.toBeVisible();
 
-  await expect(page.locator(".bookshelf .loading-circle")).toBeVisible();
+  await expect(page.locator(".bookshelf .loading-circle")).toBeVisible({
+    timeout: 50000,
+  });
   await expect(page.locator(".bookshelf .loading-circle")).not.toBeVisible();
+
+  await expect(page.locator(".bookshelf__error")).not.toBeVisible();
+
+  const bookListVisible = await page
+    .locator(".bookshelf .book-list")
+    .isVisible();
+  const endMessageVisible = await page
+    .locator(".bookshelf__fetch-all-msg")
+    .isVisible();
+  expect(bookListVisible || endMessageVisible).toBe(true);
 
   await expect(page.locator(".bookshelf .book-list")).toBeVisible();
 

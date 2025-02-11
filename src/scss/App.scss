@@ -7,3 +7,24 @@ main {
   text-align: center;
   overflow-x: hidden;
 }
+
+.toTopBtn {
+  width: 3rem;
+  height: 3rem;
+  background-color: #777777;
+  border-radius: 50%;
+  color: #fff;
+  position: fixed;
+  bottom: 10%;
+  right: 10%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  &.toTopBtn--show {
+    opacity: 1;
+    visibility: visible;
+  }
+}

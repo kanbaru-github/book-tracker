@@ -1,50 +1,29 @@
-# React + TypeScript + Vite
+# BOOK TRACKER
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 仕様
 
-Currently, two official plugins are available:
+- Google Booksへの検索
+- Google Booksのマイライブラリの検索
+    - 書籍タイトル、著者、カテゴリーによる絞り込み機能
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 使用技術
 
-## Expanding the ESLint configuration
+- [npm](https://www.npmjs.com/)
+- [React](https://ja.react.dev/)
+- [Vite](https://vitejs.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Sass](https://sass-lang.com/)
+- [Lucide](https://lucide.dev/)
+- [Google Books APIs](https://developers.google.com/books?hl=ja)
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## 実装経緯
+元々はNotionで読書の記録をしておりましたが、起票に時間がかかってしまっていたので、  
+Google Booksに移行しましたが、検索機能がなく不便でしたので、  
+マイライブラリからデータを取得した上で検索できるアプリを作成したいと考え実装しました。
 
-- Configure the top-level `parserOptions` property like this:
+## その他
+その他の情報に関しましては同リポジトリのdocフォルダー内に格納しております
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ["./tsconfig.node.json", "./tsconfig.app.json"],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from "eslint-plugin-react";
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: "18.3" } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs["jsx-runtime"].rules,
-  },
-});
-```
+## 今後
+認証や書き込み処理などサーバーサイドの処理が欲しいため  
+BOOK TRACER V2を学習がてらGO langを用いて実装予定です

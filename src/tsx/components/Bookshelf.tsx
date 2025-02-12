@@ -112,12 +112,15 @@ const Bookshelf = () => {
     setIsDialogOpen(true);
   };
 
+  const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     if (isDialogOpen) {
+      dialogRef.current?.showModal();
       inputRef.current?.focus();
       document.body.classList.add("dialog-open");
     } else {
+      dialogRef.current?.close();
       document.body.classList.remove("dialog-open");
     }
   }, [isDialogOpen]);
@@ -185,11 +188,7 @@ const Bookshelf = () => {
         </button>
       )}
 
-      <dialog
-        open={isDialogOpen}
-        className="bookshelf__dialog"
-        aria-modal="true"
-      >
+      <dialog ref={dialogRef} className="bookshelf__dialog" aria-modal="true">
         <h3 aria-labelledby="dialog-title">
           Google BooksのユーザーIDを入力してください。
         </h3>
@@ -204,7 +203,9 @@ const Bookshelf = () => {
           </a>
           のページURLから取得できます。
           <br />
-          例: https://books.google.com/books?uid=<span>123456789</span>
+          <code>
+            https://books.google.com/books?uid=<span>123456789</span>
+          </code>
         </p>
         <form onSubmit={handleSetUserId}>
           <input

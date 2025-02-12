@@ -17,14 +17,16 @@ main {
   position: fixed;
   bottom: 10%;
   right: 10%;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
   visibility: hidden;
-  transition:
-    opacity 0.3s ease,
-    visibility 0.3s ease;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  &:hover {
+    filter: opacity(0.5);
+  }
   &.toTopBtn--show {
     opacity: 1;
     visibility: visible;

@@ -29,6 +29,10 @@
       border-radius: 5px;
       background-color: #007bff;
       color: #fff;
+      cursor: pointer;
+      :hover {
+        filter: opacity(0.5);
+      }
     }
   }
 

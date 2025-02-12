@@ -82,12 +82,30 @@
   }
 
   &__dialog {
-    position: absolute;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 90%;
+    transform: translate(-50%, -50%);
     background-color: #f7fb83;
     border: 3px solid #ed4646;
     line-height: 1.5;
     border-radius: 1rem;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    &::backdrop {
+      background-color: rgba($color: #000, $alpha: 0.2);
+    }
+
+    p {
+      text-align: left;
+    }
+
+    code {
+      background-color: #ddd;
+      padding: 0.5rem;
+      line-height: 1;
+      border-radius: 0.5rem;
+    }
 
     span {
       font-weight: bold;

@@ -1,6 +1,6 @@
 {
   "editor.tabSize": 2,
-  "cSpell.words": ["VITE", "peaceiris"],
+  "cSpell.words": ["peaceiris", "VITE"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "togglequotes.chars": ["\"", "'", "`"]

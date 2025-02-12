@@ -1,0 +1,73 @@
+@use "../foundation/_media" as media;
+@use "../foundation/_variables.scss" as vars;
+
+.header {
+  width: 100%;
+  border-bottom: 1mm ridge rgba($color: #333, $alpha: 1);
+  background-color: #fff;
+  z-index: map-get(vars.$z-layers, header);
+
+  &--fixed {
+    position: sticky;
+    top: 0;
+  }
+
+  &__nav {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 auto;
+
+    &-logo {
+      margin: 0 auto;
+      width: fit-content;
+      line-height: 1;
+      text-align: center;
+
+      a {
+        font-size: 1.5rem;
+        font-weight: bold;
+        font-family: fantasy;
+        text-decoration: none;
+        color: #000;
+      }
+    }
+  }
+
+  &__links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    > li {
+      border: 1px solid #333;
+      width: 5rem;
+      height: 4rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include media.pc {
+        width: 7rem;
+      }
+      &:hover {
+        filter: drop-shadow(16px 16px 20px rgb(72, 112, 207)) invert(75%);
+      }
+
+      a {
+        font-size: 1.2rem;
+        font-weight: bold;
+        font-family: serif;
+        color: #333;
+
+        svg {
+          margin-right: 0.2rem;
+          display: block;
+          margin: 0 auto;
+        }
+      }
+    }
+  }
+}

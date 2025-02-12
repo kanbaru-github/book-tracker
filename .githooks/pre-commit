@@ -2,11 +2,17 @@
 
 # Run static analysis
 npm run lint
-
 # Check the exit code of the lint command
 if [ $? -ne 0 ]; then
   echo "Linting failed. Please fix the errors before committing."
   exit 1
+fi
+
+# Run format on tsx, scss, md, and html files only
+npx prettier --write "**/*.{tsx,scss,md,html}"
+# Check for differences after formatting
+if ! git diff --quiet; then
+  echo "Formatting changes detected. Please stage the changes."
 fi
 
 # If we get here, linting passed

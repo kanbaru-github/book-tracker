@@ -1,5 +1,20 @@
+$header-height: 70px;
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: $header-height;
+}
+
 body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+
+  &.dialog-open {
+    overflow: hidden;
+  }
+}
+
+a {
+  text-decoration: none;
 }

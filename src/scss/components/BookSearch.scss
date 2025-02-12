@@ -1,12 +1,16 @@
-.search-section {
+.book-search {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 
   h2 {
-    font-size: 24px;
+    font-size: 2rem;
     font-weight: bold;
+    font-family: serif;
     margin-bottom: 20px;
+    svg {
+      margin-right: 0.5rem;
+    }
   }
 
   &__input-container {

@@ -1,11 +1,12 @@
 .main-visual {
   width: 100%;
-  margin: 0 auto;
+  margin: 1.5rem auto 0;
 
   h1 {
     font-size: 4rem;
-    font-family: serif;
+    font-family: fantasy;
     margin: 0;
+    line-height: 1;
   }
 
   &__description {

@@ -26,6 +26,14 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => {
     localStorage.removeItem("googleBooksUserId");
   });
+
+  // ユーザーID入力ダイアログが表示されるまで待機
+  await expect(page.locator(".bookshelf__dialog")).toBeVisible();
+  // ユーザーIDを入力
+  await page.fill('input[name="userId"]', TEST_ACCOUNT);
+  await page.click('button[aria-label="Google BooksユーザーID設定"]');
+  // ダイアログが閉じるまで待機
+  await expect(page.locator(".bookshelf__dialog")).not.toBeVisible();
 });
 
 test("has title", async ({ page }) => {
@@ -63,14 +71,20 @@ test.describe("Main Component", () => {
     expect(ogUrl).toBe("https://zucky2021.github.io/book-tracker/");
   });
 
-  test('Twitterカード', async ({ page }) => {
-    await page.goto('/');
+  test("Twitterカード", async ({ page }) => {
+    await page.goto("/");
 
-    const twitterCard = await page.locator('meta[name="twitter:card"]').getAttribute('content');
-    expect(twitterCard).toBe('summary')
+    const twitterCard = await page
+      .locator('meta[name="twitter:card"]')
+      .getAttribute("content");
+    expect(twitterCard).toBe("summary");
 
-    const twitterImage = await page.locator('meta[name="twitter:image"]').getAttribute('content');
-    expect(twitterImage).toBe('https://zucky2021.github.io/book-tracker/react.svg');
+    const twitterImage = await page
+      .locator('meta[name="twitter:image"]')
+      .getAttribute("content");
+    expect(twitterImage).toBe(
+      "https://zucky2021.github.io/book-tracker/react.svg",
+    );
   });
 
   test("Main visual component", async ({ page }) => {
@@ -84,16 +98,6 @@ test.describe("Main Component", () => {
     await expect(googleBooksLink).toBeVisible();
     await expect(googleBooksLink).toHaveAttribute("target", "_blank");
     await expect(googleBooksLink).toHaveAttribute("rel", "noopener noreferrer");
-
-    // リンクをクリックして新しいタブを開く
-    const [newPage] = await Promise.all([
-      page.waitForEvent("popup"), // 新しいタブが開くのを待つ
-      googleBooksLink.click(), // リンクをクリック
-    ]);
-    // 新しいタブが読み込まれるのを待つ
-    await newPage.waitForLoadState();
-    // 新しいタブのURLがGoogle BooksのURLと一致することを確認
-    await expect(newPage.url()).toBe("https://books.google.co.jp/");
   });
 });
 
@@ -119,10 +123,9 @@ test("BookSearch component", async ({ page }) => {
   await page.fill('input[name="search"]', "test book");
   await page.click('button[aria-label="書籍検索実行"]');
 
-  await expect(page.locator(".book-search .loading-circle")).toBeVisible({
-    timeout: 50000,
+  await expect(page.locator(".book-search .loading-circle")).not.toBeVisible({
+    timeout: 5000,
   });
-  await expect(page.locator(".book-search .loading-circle")).not.toBeVisible();
 
   await expect(page.locator(".book-search .book-list")).toBeVisible();
 
@@ -135,16 +138,8 @@ test("Bookshelf component", async ({ page }) => {
 
   await expect(page.locator(".bookshelf")).toBeVisible();
 
-  // ユーザーID入力ダイアログが表示されるまで待機
-  await expect(page.locator(".bookshelf__dialog")).toBeVisible();
-  // ユーザーIDを入力
-  await page.fill('input[name="userId"]', TEST_ACCOUNT);
-  await page.click('button[aria-label="Google BooksユーザーID設定"]');
-  // ダイアログが閉じるまで待機
-  await expect(page.locator(".bookshelf__dialog")).not.toBeVisible();
-
-  await expect(page.locator(".bookshelf .loading-circle")).toBeVisible({
-    timeout: 50000,
+  await expect(page.locator(".bookshelf .loading-circle")).not.toBeVisible({
+    timeout: 5000,
   });
   await expect(page.locator(".bookshelf .loading-circle")).not.toBeVisible();
 

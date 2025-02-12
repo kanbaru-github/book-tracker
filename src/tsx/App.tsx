@@ -18,6 +18,14 @@ function App() {
     addEventListener("scroll", handleIsTop);
   }, []);
 
+  const handleToTopBtn = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
   return (
     <>
       <Header />
@@ -30,9 +38,13 @@ function App() {
         <Bookshelf />
       </main>
 
-      <a href="#" className={`toTopBtn ${!isTop ? "toTopBtn--show" : ""}`}>
+      <button
+        className={`toTopBtn ${!isTop ? "toTopBtn--show" : ""}`}
+        onClick={handleToTopBtn}
+        aria-label="ページトップへ戻る"
+      >
         <ArrowUp size={24} />
-      </a>
+      </button>
     </>
   );
 }

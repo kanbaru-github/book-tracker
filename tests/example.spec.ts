@@ -63,6 +63,16 @@ test.describe("Main Component", () => {
     expect(ogUrl).toBe("https://zucky2021.github.io/book-tracker/");
   });
 
+  test('Twitterカード', async ({ page }) => {
+    await page.goto('/');
+
+    const twitterCard = await page.locator('meta[name="twitter:card"]').getAttribute('content');
+    expect(twitterCard).toBe('summary')
+
+    const twitterImage = await page.locator('meta[name="twitter:image"]').getAttribute('content');
+    expect(twitterImage).toBe('https://zucky2021.github.io/book-tracker/react.svg');
+  });
+
   test("Main visual component", async ({ page }) => {
     await page.goto("/");
 

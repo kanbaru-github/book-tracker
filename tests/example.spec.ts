@@ -38,6 +38,65 @@ test("has title", async ({ page }) => {
   expect(errors).toHaveLength(0);
 });
 
+test.describe("Main Component", () => {
+  test("OGP設定", async ({ page }) => {
+    await page.goto("/");
+
+    const ogTitle = await page
+      .locator('meta[property="og:title"]')
+      .getAttribute("content");
+    expect(ogTitle).toBe("BOOK TRACKER");
+
+    const ogDescription = await page
+      .locator('meta[property="og:description"]')
+      .getAttribute("content");
+    expect(ogDescription).toBe("Google Books 拡張アプリ");
+
+    const ogImage = await page
+      .locator('meta[property="og:image"]')
+      .getAttribute("content");
+    expect(ogImage).toBe("/book-tracker/react.svg");
+
+    const ogUrl = await page
+      .locator('meta[property="og:url"]')
+      .getAttribute("content");
+    expect(ogUrl).toBe("https://zucky2021.github.io/book-tracker/");
+  });
+
+  test('Twitterカード', async ({ page }) => {
+    await page.goto('/');
+
+    const twitterCard = await page.locator('meta[name="twitter:card"]').getAttribute('content');
+    expect(twitterCard).toBe('summary')
+
+    const twitterImage = await page.locator('meta[name="twitter:image"]').getAttribute('content');
+    expect(twitterImage).toBe('https://zucky2021.github.io/book-tracker/react.svg');
+  });
+
+  test("Main visual component", async ({ page }) => {
+    await page.goto("/");
+
+    await expect(page.locator(".main-visual")).toBeVisible();
+
+    const googleBooksLink = page.locator(
+      'a[href="https://books.google.co.jp/"]',
+    );
+    await expect(googleBooksLink).toBeVisible();
+    await expect(googleBooksLink).toHaveAttribute("target", "_blank");
+    await expect(googleBooksLink).toHaveAttribute("rel", "noopener noreferrer");
+
+    // リンクをクリックして新しいタブを開く
+    const [newPage] = await Promise.all([
+      page.waitForEvent("popup"), // 新しいタブが開くのを待つ
+      googleBooksLink.click(), // リンクをクリック
+    ]);
+    // 新しいタブが読み込まれるのを待つ
+    await newPage.waitForLoadState();
+    // 新しいタブのURLがGoogle BooksのURLと一致することを確認
+    await expect(newPage.url()).toBe("https://books.google.co.jp/");
+  });
+});
+
 test("Header component", async ({ page }) => {
   await page.goto("/");
 
